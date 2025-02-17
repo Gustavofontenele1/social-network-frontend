@@ -1,4 +1,3 @@
-// src/app/profile/page.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -11,8 +10,8 @@ const ProfilePage = () => {
   const [message, setMessage] = useState<string>('');
   const [messages, setMessages] = useState<any[]>([]);
   const router = useRouter();
-  const userId = 'user_id_here'; // Defina o ID do usuário logado
-  const receiverId = 'receiver_user_id_here'; // Defina o ID do destinatário
+  const userId = 'user_id_here';
+  const receiverId = 'receiver_user_id_here';
 
   useEffect(() => {
     const fetchProfile = async () => {

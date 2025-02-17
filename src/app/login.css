@@ -1,0 +1,49 @@
+/* Fundo com gradiente */
+body {
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .bg-gradient-to-r {
+    background: linear-gradient(to right, #000000, #333333, #444444);
+  }
+  
+  /* Efeito de partículas animadas */
+  .particles {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+    background-size: 20px 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    animation: moveParticles 5s infinite;
+  }
+  
+  @keyframes moveParticles {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(100%, 100%);
+    }
+  }
+  
+  /* Estilo da logo */
+  .logo-container img {
+    animation: spin 2s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Efeito de texto */
+  .text-shadow-lg {
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
+  }
+  

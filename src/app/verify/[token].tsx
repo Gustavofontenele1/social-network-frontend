@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useRouter } from "next/router";
 import axios from "axios";
 
 const Verify: React.FC = () => {
@@ -9,7 +9,8 @@ const Verify: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { token } = useParams();
+  const router = useRouter();
+  const { token } = router.query;
 
   useEffect(() => {
     if (token && typeof token === "string") {
@@ -17,27 +18,27 @@ const Verify: React.FC = () => {
     }
   }, [token]);
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const verifyAccount = async (verificationToken: string): Promise<void> => {
-  setLoading(true);
-  try {
-    const req = await axios.post(`${API_URL}/api/auth/verify`, {
-      token: verificationToken,
-    });
+  const verifyAccount = async (verificationToken: string): Promise<void> => {
+    setLoading(true);
+    try {
+      const req = await axios.post(`${API_URL}/api/auth/verify`, {
+        token: verificationToken,
+      });
 
-    if (req.status === 200) {
-      setSuccessMessage("Conta verificada com sucesso! Você agora pode fazer login.");
-    } else {
-      setErrorMessage("Erro ao verificar o token.");
+      if (req.status === 200) {
+        setSuccessMessage("Conta verificada com sucesso! Você agora pode fazer login.");
+      } else {
+        setErrorMessage("Erro ao verificar o token.");
+      }
+    } catch (error) {
+      console.error("Erro ao verificar a conta:", error);
+      setErrorMessage("Erro ao verificar o token. Tente novamente.");
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error("Erro ao verificar a conta:", error);
-    setErrorMessage("Erro ao verificar o token. Tente novamente.");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div>

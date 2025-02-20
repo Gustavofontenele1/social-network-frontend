@@ -4,12 +4,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
-  const [step, setStep] = useState(1);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -32,9 +30,9 @@ export default function SignupPage() {
       });
 
       if (res.ok) {
-        setSuccessMessage("Código de verificação enviado para seu e-mail!");
-        setStep(2);
+        setSuccessMessage("Cadastro realizado com sucesso! Verifique seu e-mail para ativar sua conta.");
         setErrorMessage("");
+        router.push("/login");
       } else {
         const data = await res.json();
         setErrorMessage(data.message || "Erro no cadastro");
@@ -47,149 +45,55 @@ export default function SignupPage() {
     }
   };
 
-  const handleVerify = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    setLoading(true);
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code: verificationCode }),
-      });
-
-      if (res.ok) {
-        setSuccessMessage("Conta verificada com sucesso!");
-        router.push("/login");
-      } else {
-        const data = await res.json();
-
-        if (data.error === "Código de verificação inválido ou expirado") {
-          setErrorMessage("O código de verificação expirou. Solicite um novo código.");
-        } else {
-          setErrorMessage(data.error || "Código inválido");
-        }
-      }
-    } catch (error) {
-      console.error("Erro na verificação:", error);
-      setErrorMessage("Erro ao tentar verificar o código. Tente novamente.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleResendCode = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/resend-code`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      if (res.ok) {
-        setSuccessMessage("Novo código de verificação enviado para seu e-mail.");
-        setErrorMessage("");
-      } else {
-        const data = await res.json();
-        setErrorMessage(data.error || "Erro ao enviar novo código.");
-      }
-    } catch (error) {
-      console.error("Erro ao enviar novo código:", error);
-      setErrorMessage("Erro ao tentar enviar um novo código. Tente novamente.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      {step === 1 ? (
-        <form
-          onSubmit={handleSignup}
-          className="p-6 bg-white rounded shadow-md w-80 space-y-4"
-        >
-          <h2 className="text-2xl font-bold text-center">Cadastro</h2>
-          {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
-          {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-700">
+      <form
+        onSubmit={handleSignup}
+        className="p-8 bg-black bg-opacity-50 backdrop-blur-lg rounded-xl shadow-xl w-96 space-y-6"
+      >
+        <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-300 text-center">Cadastro</h2>
+        {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
+        {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
+
+        <div className="space-y-4">
           <input
             type="text"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
+            className="w-full p-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
           />
           <input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
+            className="w-full p-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
           />
           <input
             type="password"
             placeholder="Senha"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
+            className="w-full p-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
           />
           <input
             type="password"
             placeholder="Confirme a senha"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
+            className="w-full p-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
           />
-          <button
-            type="submit"
-            className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            disabled={loading}
-          >
-            {loading ? "Cadastrando..." : "Criar Conta"}
-          </button>
-        </form>
-      ) : (
-        <form
-          onSubmit={handleVerify}
-          className="p-6 bg-white rounded shadow-md w-80 space-y-4"
+        </div>
+
+        <button
+          type="submit"
+          className="w-full p-3 bg-gradient-to-r from-teal-400 to-blue-500 text-white rounded-lg hover:from-teal-500 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-300"
+          disabled={loading}
         >
-          <h2 className="text-2xl font-bold text-center">Verificação</h2>
-          <p className="text-center text-gray-600">Digite o código enviado para seu e-mail.</p>
-          {errorMessage && (
-            <div className="text-red-500 text-center">
-              <p>{errorMessage}</p>
-              {errorMessage.includes("expirou") && (
-                <button
-                  onClick={handleResendCode}
-                  className="text-blue-500 underline"
-                >
-                  Solicitar um novo código
-                </button>
-              )}
-            </div>
-          )}
-          {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
-          <input
-            type="text"
-            placeholder="Código de verificação"
-            value={verificationCode}
-            onChange={(e) => setVerificationCode(e.target.value)}
-            className="w-full p-2 border rounded"
-            required
-          />
-          <button
-            type="submit"
-            className="w-full p-2 bg-green-500 text-white rounded hover:bg-green-600"
-            disabled={loading}
-          >
-            {loading ? "Verificando..." : "Verificar"}
-          </button>
-        </form>
-      )}
+          {loading ? "Cadastrando..." : "Criar Conta"}
+        </button>
+      </form>
     </div>
   );
 }

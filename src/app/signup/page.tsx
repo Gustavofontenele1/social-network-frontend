@@ -34,7 +34,7 @@ export default function SignupPage() {
           "Cadastro realizado com sucesso! Verifique seu e-mail para ativar sua conta."
         );
         setErrorMessage("");
-        router.push("/login"); // Redireciona para o login após o cadastro
+        router.push("/login");
       } else {
         const data = await res.json();
         setErrorMessage(data.message || "Erro no cadastro");
@@ -53,9 +53,17 @@ export default function SignupPage() {
         onSubmit={handleSignup}
         className="p-8 bg-black bg-opacity-50 backdrop-blur-lg rounded-xl shadow-xl w-96 space-y-6"
       >
-        <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-300 text-center">Cadastro</h2>
+        <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-300 text-center">
+          Cadastro
+        </h2>
+
         {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
-        {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
+        {successMessage && (
+          <div className="text-green-500 text-center">
+            <p>{successMessage}</p>
+            <p className="mt-2 text-white">Você será redirecionado para o login em breve.</p>
+          </div>
+        )}
 
         <div className="space-y-4">
           <input
@@ -95,6 +103,15 @@ export default function SignupPage() {
         >
           {loading ? "Cadastrando..." : "Criar Conta"}
         </button>
+
+        <div className="mt-4 text-center text-sm text-white">
+          <p>
+            Já tem uma conta?{" "}
+            <a href="/login" className="text-teal-400 hover:underline">
+              Faça login aqui.
+            </a>
+          </p>
+        </div>
       </form>
     </div>
   );

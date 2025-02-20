@@ -19,11 +19,14 @@ export default function ResetPasswordPage() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/forgot-password`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/forgot-password`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }
+      );
 
       if (res.ok) {
         setSuccessMessage("Código de verificação enviado para seu e-mail!");
@@ -46,14 +49,19 @@ export default function ResetPasswordPage() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify-reset-code`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code: verificationCode }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify-reset-code`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, code: verificationCode }),
+        }
+      );
 
       if (res.ok) {
-        setSuccessMessage("Código verificado com sucesso! Agora defina sua nova senha.");
+        setSuccessMessage(
+          "Código verificado com sucesso! Agora defina sua nova senha."
+        );
         setStep(3);
         setErrorMessage("");
       } else {
@@ -77,11 +85,14 @@ export default function ResetPasswordPage() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/reset-password`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: verificationCode, newPassword }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/reset-password`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: verificationCode, newPassword }),
+        }
+      );
 
       if (res.ok) {
         setSuccessMessage("Senha alterada com sucesso!");
@@ -99,25 +110,32 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-700">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
       {step === 1 ? (
         <form
           onSubmit={handleEmailSubmit}
-          className="p-8 bg-black bg-opacity-50 backdrop-blur-lg rounded-xl shadow-xl w-96 space-y-6"
+          className="p-6 bg-white rounded shadow-md w-80 space-y-4"
         >
-          <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-300 text-center">Recuperação de Senha</h2>
-          {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
-          {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
+          <h2 className="text-2xl font-bold text-center">
+            Recuperação de Senha
+          </h2>
+          {errorMessage && (
+            <p className="text-red-500 text-center">{errorMessage}</p>
+          )}
+          {successMessage && (
+            <p className="text-green-500 text-center">{successMessage}</p>
+          )}
           <input
             type="email"
             placeholder="Digite seu e-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+            className="w-full p-2 border rounded"
+            required
           />
           <button
             type="submit"
-            className="w-full p-3 bg-gradient-to-r from-teal-400 to-blue-500 text-white rounded-lg hover:from-teal-500 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-300"
+            className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             disabled={loading}
           >
             {loading ? "Enviando..." : "Enviar Código"}
@@ -126,23 +144,28 @@ export default function ResetPasswordPage() {
       ) : step === 2 ? (
         <form
           onSubmit={handleVerifyCode}
-          className="p-8 bg-black bg-opacity-50 backdrop-blur-lg rounded-xl shadow-xl w-96 space-y-6"
+          className="p-6 bg-white rounded shadow-md w-80 space-y-4"
         >
-          <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-300 text-center">Verificação do Código</h2>
-          <p className="text-center text-gray-300">
+          <h2 className="text-2xl font-bold text-center">
+            Verificação do Código
+          </h2>
+          <p className="text-center text-gray-600">
             Digite o código enviado para seu e-mail.
           </p>
-          {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
+          {errorMessage && (
+            <p className="text-red-500 text-center">{errorMessage}</p>
+          )}
           <input
             type="text"
             placeholder="Código de verificação"
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value)}
-            className="w-full p-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+            className="w-full p-2 border rounded"
+            required
           />
           <button
             type="submit"
-            className="w-full p-3 bg-gradient-to-r from-teal-400 to-blue-500 text-white rounded-lg hover:from-teal-500 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-300"
+            className="w-full p-2 bg-green-500 text-white rounded hover:bg-green-600"
             disabled={loading}
           >
             {loading ? "Verificando..." : "Verificar Código"}
@@ -151,28 +174,34 @@ export default function ResetPasswordPage() {
       ) : (
         <form
           onSubmit={handleResetPassword}
-          className="p-8 bg-black bg-opacity-50 backdrop-blur-lg rounded-xl shadow-xl w-96 space-y-6"
+          className="p-6 bg-white rounded shadow-md w-80 space-y-4"
         >
-          <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-300 text-center">Nova Senha</h2>
-          {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
-          {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
+          <h2 className="text-2xl font-bold text-center">Nova Senha</h2>
+          {errorMessage && (
+            <p className="text-red-500 text-center">{errorMessage}</p>
+          )}
+          {successMessage && (
+            <p className="text-green-500 text-center">{successMessage}</p>
+          )}
           <input
             type="password"
             placeholder="Nova senha"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            className="w-full p-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+            className="w-full p-2 border rounded"
+            required
           />
           <input
             type="password"
             placeholder="Confirmar nova senha"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full p-3 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+            className="w-full p-2 border rounded"
+            required
           />
           <button
             type="submit"
-            className="w-full p-3 bg-gradient-to-r from-teal-400 to-blue-500 text-white rounded-lg hover:from-teal-500 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-300"
+            className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             disabled={loading}
           >
             {loading ? "Alterando..." : "Alterar Senha"}

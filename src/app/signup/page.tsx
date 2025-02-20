@@ -30,9 +30,11 @@ export default function SignupPage() {
       });
 
       if (res.ok) {
-        setSuccessMessage("Cadastro realizado com sucesso! Verifique seu e-mail para ativar sua conta.");
+        setSuccessMessage(
+          "Cadastro realizado com sucesso! Verifique seu e-mail para ativar sua conta."
+        );
         setErrorMessage("");
-        router.push("/login");
+        router.push("/login"); // Redireciona para o login após o cadastro
       } else {
         const data = await res.json();
         setErrorMessage(data.message || "Erro no cadastro");

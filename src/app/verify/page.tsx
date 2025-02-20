@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/router";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 
 interface ApiResponse {
@@ -18,6 +18,11 @@ const VerifyClient: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+    }
+  }, []);
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,9 +56,7 @@ const VerifyClient: React.FC = () => {
       );
 
       if (res.status === 200) {
-        setSuccessMessage(
-          "Código verificado com sucesso! Agora defina sua nova senha."
-        );
+        setSuccessMessage("Código verificado com sucesso! Agora defina sua nova senha.");
       } else {
         setErrorMessage("Código inválido");
       }
@@ -126,8 +129,7 @@ const VerifyClient: React.FC = () => {
         </form>
       )}
 
-      {successMessage ===
-        "Código verificado com sucesso! Agora defina sua nova senha." && (
+      {successMessage === "Código verificado com sucesso! Agora defina sua nova senha." && (
         <form onSubmit={handleResetPassword}>
           <input
             type="password"

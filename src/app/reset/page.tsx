@@ -1,20 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 const ResetPasswordPage = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [token, setToken] = useState<string | null>(null); // token como estado local
   const router = useRouter();
-  const { token } = router.query;
+
+  // Aguardar o carregamento do router antes de acessar o query
+  useEffect(() => {
+    if (router.isReady) {
+      const { token } = router.query;
+      setToken(token as string); // Atribuir o token ao estado
+    }
+  }, [router.isReady, router.query]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
       setMessage('As senhas não coincidem!');
+      return;
+    }
+
+    if (!token) {
+      setMessage('Token não encontrado.');
       return;
     }
 

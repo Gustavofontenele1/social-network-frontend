@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 import axios from "axios";
 
 const Verify: React.FC = () => {
@@ -9,12 +9,14 @@ const Verify: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const router = useRouter();
-  const { token } = router.query;
+  const { token } = useParams();
 
   useEffect(() => {
     if (token && typeof token === "string") {
+      console.log("Token capturado:", token);
       verifyAccount(token);
+    } else {
+      setErrorMessage("Token inválido ou não encontrado.");
     }
   }, [token]);
 
@@ -23,6 +25,7 @@ const Verify: React.FC = () => {
   const verifyAccount = async (verificationToken: string): Promise<void> => {
     setLoading(true);
     try {
+      console.log("Enviando requisição de verificação para o token:", verificationToken);
       const req = await axios.post(`${API_URL}/api/auth/verify`, {
         token: verificationToken,
       });

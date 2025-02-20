@@ -23,25 +23,33 @@ export default function SignupPage() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, email, password }),
+        }
+      );
 
       if (res.ok) {
         setSuccessMessage(
           "Cadastro realizado com sucesso! Verifique seu e-mail para ativar sua conta."
         );
         setErrorMessage("");
-        router.push("/login");
+
+        setTimeout(() => {
+          router.push("/login");
+        }, 3000);
       } else {
         const data = await res.json();
         setErrorMessage(data.message || "Erro no cadastro");
       }
     } catch (error) {
       console.error("Erro durante o cadastro:", error);
-      setErrorMessage("Erro ao tentar se cadastrar. Tente novamente mais tarde.");
+      setErrorMessage(
+        "Erro ao tentar se cadastrar. Tente novamente mais tarde."
+      );
     } finally {
       setLoading(false);
     }
@@ -57,11 +65,15 @@ export default function SignupPage() {
           Cadastro
         </h2>
 
-        {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
+        {errorMessage && (
+          <p className="text-red-500 text-center">{errorMessage}</p>
+        )}
         {successMessage && (
           <div className="text-green-500 text-center">
             <p>{successMessage}</p>
-            <p className="mt-2 text-white">Você será redirecionado para o login em breve.</p>
+            <p className="mt-2 text-white">
+              Você será redirecionado para o login em breve.
+            </p>
           </div>
         )}
 

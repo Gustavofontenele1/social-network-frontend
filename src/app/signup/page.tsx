@@ -41,9 +41,7 @@ export default function SignupPage() {
       }
     } catch (error) {
       console.error("Erro durante o cadastro:", error);
-      setErrorMessage(
-        "Erro ao tentar se cadastrar. Tente novamente mais tarde."
-      );
+      setErrorMessage("Erro ao tentar se cadastrar. Tente novamente mais tarde.");
     } finally {
       setLoading(false);
     }
@@ -54,7 +52,7 @@ export default function SignupPage() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth//verify`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, code: verificationCode }),
@@ -64,11 +62,41 @@ export default function SignupPage() {
         setSuccessMessage("Conta verificada com sucesso!");
         router.push("/login");
       } else {
-        setErrorMessage("Código inválido");
+        const data = await res.json();
+
+        if (data.error === "Código de verificação inválido ou expirado") {
+          setErrorMessage("O código de verificação expirou. Solicite um novo código.");
+        } else {
+          setErrorMessage(data.error || "Código inválido");
+        }
       }
     } catch (error) {
       console.error("Erro na verificação:", error);
       setErrorMessage("Erro ao tentar verificar o código. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendCode = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/resend-code`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (res.ok) {
+        setSuccessMessage("Novo código de verificação enviado para seu e-mail.");
+        setErrorMessage("");
+      } else {
+        const data = await res.json();
+        setErrorMessage(data.error || "Erro ao enviar novo código.");
+      }
+    } catch (error) {
+      console.error("Erro ao enviar novo código:", error);
+      setErrorMessage("Erro ao tentar enviar um novo código. Tente novamente.");
     } finally {
       setLoading(false);
     }
@@ -82,12 +110,8 @@ export default function SignupPage() {
           className="p-6 bg-white rounded shadow-md w-80 space-y-4"
         >
           <h2 className="text-2xl font-bold text-center">Cadastro</h2>
-          {errorMessage && (
-            <p className="text-red-500 text-center">{errorMessage}</p>
-          )}
-          {successMessage && (
-            <p className="text-green-500 text-center">{successMessage}</p>
-          )}
+          {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
+          {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
           <input
             type="text"
             placeholder="Username"
@@ -134,12 +158,21 @@ export default function SignupPage() {
           className="p-6 bg-white rounded shadow-md w-80 space-y-4"
         >
           <h2 className="text-2xl font-bold text-center">Verificação</h2>
-          <p className="text-center text-gray-600">
-            Digite o código enviado para seu e-mail.
-          </p>
+          <p className="text-center text-gray-600">Digite o código enviado para seu e-mail.</p>
           {errorMessage && (
-            <p className="text-red-500 text-center">{errorMessage}</p>
+            <div className="text-red-500 text-center">
+              <p>{errorMessage}</p>
+              {errorMessage.includes("expirou") && (
+                <button
+                  onClick={handleResendCode}
+                  className="text-blue-500 underline"
+                >
+                  Solicitar um novo código
+                </button>
+              )}
+            </div>
           )}
+          {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
           <input
             type="text"
             placeholder="Código de verificação"

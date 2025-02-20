@@ -20,7 +20,7 @@ const Verify: React.FC = () => {
   const verifyAccount = async (verificationToken: string) => {
     setLoading(true);
     try {
-      const res = await axios.post("/api/auth/verify", { token: verificationToken });
+      const res = await axios.get(`/api/auth/verify/${verificationToken}`);
 
       if (res.status === 200) {
         setSuccessMessage("Conta verificada com sucesso! Você agora pode fazer login.");

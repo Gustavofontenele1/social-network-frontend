@@ -17,23 +17,27 @@ const Verify: React.FC = () => {
     }
   }, [token]);
 
-  const verifyAccount = async (verificationToken: string) => {
-    setLoading(true);
-    try {
-      const res = await axios.get(`/api/auth/verify/${verificationToken}`);
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-      if (res.status === 200) {
-        setSuccessMessage("Conta verificada com sucesso! Você agora pode fazer login.");
-      } else {
-        setErrorMessage("Erro ao verificar o token.");
-      }
-    } catch (error) {
-      console.error("Erro ao verificar a conta:", error);
-      setErrorMessage("Erro ao verificar o token. Tente novamente.");
-    } finally {
-      setLoading(false);
+const verifyAccount = async (verificationToken: string): Promise<void> => {
+  setLoading(true);
+  try {
+    const req = await axios.post(`${API_URL}/api/auth/verify`, {
+      token: verificationToken,
+    });
+
+    if (req.status === 200) {
+      setSuccessMessage("Conta verificada com sucesso! Você agora pode fazer login.");
+    } else {
+      setErrorMessage("Erro ao verificar o token.");
     }
-  };
+  } catch (error) {
+    console.error("Erro ao verificar a conta:", error);
+    setErrorMessage("Erro ao verificar o token. Tente novamente.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div>

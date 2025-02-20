@@ -7,14 +7,13 @@ const ResetPasswordPage = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [token, setToken] = useState<string | null>(null); // token como estado local
+  const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
 
-  // Aguardar o carregamento do router antes de acessar o query
   useEffect(() => {
     if (router.isReady) {
       const { token } = router.query;
-      setToken(token as string); // Atribuir o token ao estado
+      setToken(token as string);
     }
   }, [router.isReady, router.query]);
 

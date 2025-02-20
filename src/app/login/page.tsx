@@ -97,6 +97,12 @@ export default function LoginPage() {
               Não tem uma conta? Criar uma conta
             </a>
           </div>
+
+          <div className="text-center mt-4">
+            <a href="/reset" className="text-blue-300 hover:underline">
+              Esqueceu a senha?
+            </a>
+          </div>
         </form>
       </div>
     </div>

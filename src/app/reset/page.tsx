@@ -50,9 +50,9 @@ export default function ResetPasswordPage() {
     setLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify-code`,
+         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify/${verificationCode}`,
         {
-          method: "POST",
+          method: "GET",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, code: verificationCode }),
         }

@@ -50,7 +50,7 @@ export default function ResetPasswordPage() {
     setLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify-reset-code`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -65,7 +65,7 @@ export default function ResetPasswordPage() {
         setStep(3);
         setErrorMessage("");
       } else {
-        setErrorMessage("Código inválido");
+        setErrorMessage("Código inválido ou expirado.");
       }
     } catch (error) {
       console.error("Erro na verificação do código:", error);
@@ -74,7 +74,6 @@ export default function ResetPasswordPage() {
       setLoading(false);
     }
   };
-  
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();

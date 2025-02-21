@@ -27,15 +27,15 @@ export default function ResetPasswordPage() {
           body: JSON.stringify({ email }),
         }
       );
+      
+      const data = await res.json();
 
       if (res.ok) {
-        const data = await res.json();
         console.log(data);
         setSuccessMessage("Código de verificação enviado para seu e-mail!");
         setStep(2);
         setErrorMessage("");
       } else {
-        const data = await res.json();
         console.error(
           "Erro ao solicitar redefinição de senha:",
           data.error || "Erro desconhecido"

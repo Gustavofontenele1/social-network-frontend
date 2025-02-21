@@ -13,7 +13,7 @@ Este é o repositório do frontend do projeto **Social Network**, uma plataforma
 
 A aplicação está hospedada na Vercel e pode ser acessada pelo seguinte link:
 
-👉 [Social Network - Vercel](https://social-network-ebon-one.vercel.app/login)
+👉 [Social Network - Vercel](https://social-network-frontend-theta.vercel.app/login)
 
 ## 📌 Funcionalidades
 

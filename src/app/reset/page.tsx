@@ -27,6 +27,8 @@ export default function ResetPasswordPage() {
           body: JSON.stringify({ email }),
         }
       );
+      const data = await res.json();
+      console.log(data);
 
       if (res.ok) {
         setSuccessMessage("Código de verificação enviado para seu e-mail!");
@@ -46,7 +48,6 @@ export default function ResetPasswordPage() {
 
   const handleVerifyCode = async (e: React.FormEvent) => {
     e.preventDefault();
-  
     setLoading(true);
     try {
       const res = await fetch(
@@ -57,7 +58,6 @@ export default function ResetPasswordPage() {
           body: JSON.stringify({ email, code: verificationCode }),
         }
       );
-  
       if (res.ok) {
         setSuccessMessage(
           "Código verificado com sucesso! Agora defina sua nova senha."
@@ -74,7 +74,7 @@ export default function ResetPasswordPage() {
       setLoading(false);
     }
   };
-  
+
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
 

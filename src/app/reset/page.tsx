@@ -27,19 +27,15 @@ export default function ResetPasswordPage() {
           body: JSON.stringify({ email }),
         }
       );
-      
       const data = await res.json();
 
+      console.log(data);
+
       if (res.ok) {
-        console.log(data);
         setSuccessMessage("Código de verificação enviado para seu e-mail!");
         setStep(2);
         setErrorMessage("");
       } else {
-        console.error(
-          "Erro ao solicitar redefinição de senha:",
-          data.error || "Erro desconhecido"
-        );
         setErrorMessage(data.error || "Erro ao enviar o e-mail.");
       }
     } catch (error) {

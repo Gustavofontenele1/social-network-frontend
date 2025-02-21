@@ -46,18 +46,17 @@ export default function ResetPasswordPage() {
 
   const handleVerifyCode = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     setLoading(true);
     try {
       const res = await fetch(
-         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify/${verificationCode}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify?email=${encodeURIComponent(email)}&code=${encodeURIComponent(verificationCode)}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, code: verificationCode }),
         }
       );
-
+  
       if (res.ok) {
         setSuccessMessage(
           "Código verificado com sucesso! Agora defina sua nova senha."
@@ -74,6 +73,7 @@ export default function ResetPasswordPage() {
       setLoading(false);
     }
   };
+  
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
